@@ -4,5 +4,6 @@
     {
         public int? CurrentRoomId { get; set; }
         public bool IsStartGame { get; set; }
+        public string Name { get; set; }
     }
 }

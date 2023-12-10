@@ -25,6 +25,20 @@ namespace Amongus.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public IActionResult Exit()
+        {
+            var login = User.Identity.Name;
+            var user = Context.Users.FirstOrDefault(x => x.Login == login);
+            if (user != null)
+            {
+                user.RoomId = null;
+                Context.Users.Update(user);
+                Context.SaveChanges();
+            }
+            return Ok();
+        }
+
         [HttpGet("[action]")]
         public IActionResult GetAll()
         {
@@ -55,6 +69,33 @@ namespace Amongus.Api.Controllers
                 Context.SaveChanges();
             }
             return Ok();
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetInfo()
+        {
+            var login = User.Identity.Name;
+            var user = Context.Users.FirstOrDefault(x => x.Login == login);
+            if (user != null)
+            {
+                var users = Context.Users.Where(x => x.RoomId == user.RoomId);
+                return Ok(new GetRoomInfoDto
+                {
+                    Users = users.Select(x => new UserReadyDto
+                    {
+                        IsReady = x.IsReady,
+                        Name = x.Nickname
+                    })
+                }); 
+            }
+            return Ok();
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetUserIds(int roomId)
+        {
+            var result = Context.Users.Where(x => x.RoomId == roomId).Select(x=> x.Login).ToArray();
+            return Ok(result);
         }
     }
 }
