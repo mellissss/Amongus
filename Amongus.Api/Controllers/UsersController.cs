@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Amongus.Api.Controllers
 {
-    public class UsersController : BaseApiController
+    public class UsersController     : BaseApiController
     {
         public UsersController(AmongusContext context) : base(context)
         {
@@ -39,7 +39,6 @@ namespace Amongus.Api.Controllers
                     CurrentRoomId = user.RoomId,
                     IsStartGame = user.Room?.IsStartGame ?? false,
                     Name = user.Room?.Name
-                    
                 };
                 return Ok(result);
             }
